@@ -6,16 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminGuardUserResponse {
+public class AdminWardCareResponse {
 
-    private long totalCount;
+    private String wardUserId;
+    private String wardUserName;
+    private Long totalCount;
     private int currentPage;
     private int pageSize;
     private boolean hasNext;
-    private List<AdminGuardUserDto> guardUserList;
-
+    private List<AdminWardCareDto> list;
 
 }

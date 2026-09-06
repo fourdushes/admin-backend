@@ -14,7 +14,7 @@ public class AdminUser {
 
     @Id
     @Column(name = "admin_user_id")
-    private Long id;
+    private String id;
     private String name; // 관리자 이름
     private String password;
 
@@ -28,7 +28,7 @@ public class AdminUser {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.adminType = AdminType.ADMIN; // 기본적으로 일반 관리자(AdminType.ADMIN)로 설정
+        this.adminType = AdminType.SUPER_ADMIN; // 기본적으로 일반 관리자(AdminType.ADMIN)로 설정
     }
 
     

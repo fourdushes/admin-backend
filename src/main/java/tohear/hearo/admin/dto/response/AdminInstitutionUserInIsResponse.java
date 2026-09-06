@@ -7,15 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data 
-@NoArgsConstructor
-@AllArgsConstructor
-public class AdminGuardUserResponse {
+@NoArgsConstructor 
+@AllArgsConstructor 
+public class AdminInstitutionUserInIsResponse {
 
-    private long totalCount;
+    private Long institutionId;
+    private Long totalCount;
     private int currentPage;
     private int pageSize;
     private boolean hasNext;
-    private List<AdminGuardUserDto> guardUserList;
-
-
+    private List<AdminInstitutionUserInIsDto> list;
 }

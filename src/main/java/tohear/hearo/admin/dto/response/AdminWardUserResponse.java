@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminWardUserResponse {
 
-    private List<AdminWardUserDto> wardUserList;;
-    private int totalCount;
+    private long totalCount;
+    private int currentPage;
+    private int pageSize;
+    private boolean hasNext;
+    private List<AdminWardUserDto> wardUserList;
 
 }

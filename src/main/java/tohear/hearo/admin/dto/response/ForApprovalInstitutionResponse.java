@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @Data 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminGuardUserResponse {
+public class ForApprovalInstitutionResponse {
 
     private long totalCount;
     private int currentPage;
     private int pageSize;
     private boolean hasNext;
-    private List<AdminGuardUserDto> guardUserList;
-
+    private List<ForApprovalInstitutionDto> institutionsUserList;
 
 }

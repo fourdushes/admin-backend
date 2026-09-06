@@ -1,15 +1,22 @@
 package tohear.hearo.admin.repository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import tohear.hearo.admin.dto.response.AdminGuardUserDto;
+import tohear.hearo.admin.dto.response.AdminInstitutionDto;
 import tohear.hearo.admin.dto.response.AdminInstitutionsUserDto;
 import tohear.hearo.admin.dto.response.AdminWardUserDto;
 import tohear.hearo.archive.domain.Archive;
 import tohear.hearo.care.domain.Care;
+import tohear.hearo.care.domain.CareState;
+import tohear.hearo.institution.domain.Institution;
+import tohear.hearo.institution.domain.InstitutionApprovalState;
+import tohear.hearo.institution.domain.InstitutionRegion;
+import tohear.hearo.user.institution.InstitutionUserState;
+import tohear.hearo.user.institution.InstitutionsUser;
 
 public interface AdminUserCustomRepository {
     /**
@@ -21,13 +28,18 @@ public interface AdminUserCustomRepository {
      * 5. 유저의 보호자 목록을 확인할 수 있다 삭제 또한 가능하다
      */
 
-    Page<AdminWardUserDto> findWardUsers(Pageable pageable, String keyword, LocalDateTime startDate, LocalDateTime endDate);
-    Long GuardUserCount(String wardUserId); // 피보호자의 보호자 수
-    Page<AdminGuardUserDto> findGuardUsers(Pageable pageable, String keyword, LocalDateTime startDate, LocalDateTime endDate);
+    Page<AdminWardUserDto> findWardUsers(Pageable pageable, String keyword, LocalDate startDate, LocalDate endDate);
+    Long GuardUserCount(String wardUserId);
+    Page<AdminGuardUserDto> findGuardUsers(Pageable pageable, String keyword, LocalDate startDate, LocalDate endDate);
     Long WardUserCount(String guardUserId);
-    Page<AdminInstitutionsUserDto> findInstitutionsUsers(Pageable pageable, String keyword, LocalDateTime startDate, LocalDateTime endDate);
+    Page<AdminInstitutionsUserDto> findInstitutionsUsers(Pageable pageable, String keyword, LocalDate startDate, LocalDate endDate);
     Long countTotalTreatment(String institutionUserId);
-    Page<Archive> findArchives(Pageable pageable, String userId, LocalDateTime startDate, LocalDateTime endDate);
-    Page<Care> findCares(Pageable pageable, String userId);
+    Page<AdminInstitutionDto> findInstitutions(Pageable pageable, String keyword, LocalDate startDate, LocalDate endDate, InstitutionRegion region);
+    Long InstitutionsUserCount(Long institutionId);
+    Page<Archive> findArchives(Pageable pageable, String userId, LocalDate startDate, LocalDate endDate);
+    Page<Care> findWardCares(Pageable pageable, String wardUserId, CareState careState);
+    Page<Care> findGuardCares(Pageable pageable, String guardUserId, CareState careState);
+    Page<InstitutionsUser> findInstitutionUserInIs(Pageable pageable, String keyword, Long institutionId, InstitutionUserState state);
+    Page<Institution> forApprovalInstitution(Pageable pageable, String keyword, InstitutionApprovalState state);
     
 }

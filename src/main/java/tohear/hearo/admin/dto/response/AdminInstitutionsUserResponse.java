@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminInstitutionsUserResponse {
 
+    private long totalCount;
+    private int currentPage;
+    private int pageSize;
+    private boolean hasNext;
     private List<AdminInstitutionsUserDto> institutionsUserList;
-    private int totalCount;
 
 }
