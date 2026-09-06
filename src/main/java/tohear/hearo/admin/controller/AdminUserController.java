@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import tohear.hearo.admin.dto.request.AdminInstitutionsRequest;
+import tohear.hearo.admin.dto.request.AdminLoginRequest;
 import tohear.hearo.admin.dto.request.AdminUserRequest;
 import tohear.hearo.admin.dto.request.DeleteArchiveRequest;
 import tohear.hearo.admin.dto.request.DeleteCareRequest;
@@ -31,6 +32,7 @@ import tohear.hearo.admin.dto.response.AdminGuardUserResponse;
 import tohear.hearo.admin.dto.response.AdminInstitutionResponse;
 import tohear.hearo.admin.dto.response.AdminInstitutionUserInIsResponse;
 import tohear.hearo.admin.dto.response.AdminInstitutionsUserResponse;
+import tohear.hearo.admin.dto.response.AdminLoginResponse;
 import tohear.hearo.admin.dto.response.AdminWardArchiveResponse;
 import tohear.hearo.admin.dto.response.AdminWardCareResponse;
 import tohear.hearo.admin.dto.response.AdminWardUserResponse;
@@ -45,6 +47,13 @@ import tohear.hearo.global.response.Result;
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
+
+    @PostMapping("/login")
+    public Result login(@Valid @RequestBody AdminLoginRequest request) {
+        AdminLoginResponse response = adminUserService.validateLogin(request);
+
+        return new Result<>("200", "관리자 로그인에 성공했습니다.", response);
+    }
 
     @GetMapping("/find-ward-user")
     public Result findWardUser(@Valid @ModelAttribute AdminUserRequest request,

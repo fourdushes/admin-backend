@@ -1,15 +1,20 @@
 package tohear.hearo.admin.service;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import tohear.hearo.admin.domain.AdminUser;
 import tohear.hearo.admin.dto.request.AdminInstitutionsRequest;
+import tohear.hearo.admin.dto.request.AdminLoginRequest;
 import tohear.hearo.admin.dto.request.AdminUserRequest;
 import tohear.hearo.admin.dto.request.DeleteArchiveRequest;
 import tohear.hearo.admin.dto.request.DeleteCareRequest;
@@ -32,6 +37,7 @@ import tohear.hearo.admin.dto.response.AdminInstitutionUserInIsDto;
 import tohear.hearo.admin.dto.response.AdminInstitutionUserInIsResponse;
 import tohear.hearo.admin.dto.response.AdminInstitutionsUserDto;
 import tohear.hearo.admin.dto.response.AdminInstitutionsUserResponse;
+import tohear.hearo.admin.dto.response.AdminLoginResponse;
 import tohear.hearo.admin.dto.response.AdminWardArchiveDto;
 import tohear.hearo.admin.dto.response.AdminWardArchiveResponse;
 import tohear.hearo.admin.dto.response.AdminWardCareDto;
@@ -46,6 +52,7 @@ import tohear.hearo.archive.domain.Archive;
 import tohear.hearo.archive.repository.ArchiveRepository;
 import tohear.hearo.care.domain.Care;
 import tohear.hearo.care.repository.CareRepository;
+import tohear.hearo.global.security.JwtTokenProvider;
 import tohear.hearo.institution.domain.Institution;
 import tohear.hearo.institution.repository.InstitutionRepository;
 import tohear.hearo.user.guardian.GuardUser;
@@ -67,6 +74,32 @@ public class AdminUserService {
     private final GuardUserRepository guardUserRepository;
     private final InstitutionsUserRepository institutionsUserRepository;
     private final InstitutionRepository institutionRepository;
+    private final JwtTokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
+    private final StringRedisTemplate redisTemplate;
+
+    // 관리자 로그인
+    @Transactional
+    public AdminLoginResponse validateLogin(AdminLoginRequest request) { // 로그인 검증
+        AdminUser user = adminUserRepository.findById(request.getId()).orElseThrow(() -> new IllegalArgumentException("아이디가 올바르지 않습니다."));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
+        }
+
+        String accessToken = tokenProvider.createAccessToken(user.getId());
+        String refreshToken = tokenProvider.createRefreshToken(user.getId());
+
+        user.updateLoginTime();
+
+        redisTemplate.opsForValue().set(
+            "refresh-token:admin:" + user.getId(),
+            refreshToken,
+            Duration.ofMillis(tokenProvider.getAdminRefreshTokenValidityInMilliseconds())
+        );
+        
+        return new AdminLoginResponse(accessToken, refreshToken);
+    }
 
     // 관리자가 피보호자 유저 목록을 조회
     public AdminWardUserResponse findWardUser(AdminUserRequest request, Pageable pageable) {

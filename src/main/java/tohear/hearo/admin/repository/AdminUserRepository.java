@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import tohear.hearo.admin.domain.AdminUser;
 
-public interface AdminUserRepository extends JpaRepository<AdminUser, Long>, AdminUserCustomRepository {
+public interface AdminUserRepository extends JpaRepository<AdminUser, String>, AdminUserCustomRepository {
 
 }

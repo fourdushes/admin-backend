@@ -1,5 +1,7 @@
 package tohear.hearo.admin.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,14 +23,21 @@ public class AdminUser {
     @Enumerated(EnumType.STRING)
     private AdminType adminType; // 관리자 유형 (최고 관리자, 운영 관리자, 일반 관리자)
 
+    private LocalDateTime loginTime;
+
     public AdminUser() {
     }
 
-    public AdminUser(Long id, String name, String password, AdminType adminType) {
+    public AdminUser(String id, String name, String password, AdminType adminType) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.adminType = AdminType.SUPER_ADMIN; // 기본적으로 일반 관리자(AdminType.ADMIN)로 설정
+        this.loginTime = null;
+    }
+
+    public void updateLoginTime() {
+        this.loginTime = LocalDateTime.now();
     }
 
     
