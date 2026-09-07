@@ -1,0 +1,11 @@
+package tohear.hearo.admin.dto.request;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class AdminCareRequest {
+
+    private String keyword;
+}

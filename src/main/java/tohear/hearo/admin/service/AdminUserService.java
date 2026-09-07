@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tohear.hearo.admin.domain.AdminUser;
+import tohear.hearo.admin.dto.request.AdminCareRequest;
 import tohear.hearo.admin.dto.request.AdminInstitutionsRequest;
 import tohear.hearo.admin.dto.request.AdminLoginRequest;
 import tohear.hearo.admin.dto.request.AdminUserRequest;
@@ -27,6 +28,8 @@ import tohear.hearo.admin.dto.request.FindInstitutionUserInIsRequest;
 import tohear.hearo.admin.dto.request.FindWardCareRequest;
 import tohear.hearo.admin.dto.request.ForApprovalInstitutionRequest;
 import tohear.hearo.admin.dto.request.SingleArchiveRequest;
+import tohear.hearo.admin.dto.response.AdminCareDto;
+import tohear.hearo.admin.dto.response.AdminCareResponse;
 import tohear.hearo.admin.dto.response.AdminGuardCareDto;
 import tohear.hearo.admin.dto.response.AdminGuardCareResponse;
 import tohear.hearo.admin.dto.response.AdminGuardUserDto;
@@ -395,5 +398,35 @@ public class AdminUserService {
         Institution findInstitution = institutionRepository.findById(request.getInstitutionId()).orElseThrow(() -> new IllegalArgumentException("기관을 찾을 수 없습니다."));
 
         institutionRepository.delete(findInstitution);
+    }
+
+    // 관리자가 보호관계 조회
+    public AdminCareResponse findCare(AdminCareRequest request, Pageable pageable) {
+        Page<Care> cares = adminUserRepository.findCare(pageable, request.getKeyword());
+
+        List<AdminCareDto> careList = new ArrayList<>();
+
+        for (Care care : cares) {
+            careList.add(
+                new AdminCareDto(
+                    care.getId(),
+                    care.getMainGuardUser(),
+                    care.getCreatedAt(),
+                    care.getUpdatedAt(),
+                    care.getWardUser().getId(),
+                    care.getWardUser().getName(),
+                    care.getGuardUser().getId(),
+                    care.getGuardUser().getName()
+                )
+            );
+        }
+
+        return new AdminCareResponse(
+            cares.getTotalElements(),
+            cares.getNumber(),
+            cares.getSize(),
+            cares.hasNext(),
+            careList
+        );
     }
 }

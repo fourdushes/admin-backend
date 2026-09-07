@@ -41,5 +41,6 @@ public interface AdminUserCustomRepository {
     Page<Care> findGuardCares(Pageable pageable, String guardUserId, CareState careState);
     Page<InstitutionsUser> findInstitutionUserInIs(Pageable pageable, String keyword, Long institutionId, InstitutionUserState state);
     Page<Institution> forApprovalInstitution(Pageable pageable, String keyword, InstitutionApprovalState state);
+    Page<Care> findCare(Pageable pageable, String keyword);
     
 }

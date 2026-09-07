@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import tohear.hearo.admin.dto.request.AdminCareRequest;
 import tohear.hearo.admin.dto.request.AdminInstitutionsRequest;
 import tohear.hearo.admin.dto.request.AdminLoginRequest;
 import tohear.hearo.admin.dto.request.AdminUserRequest;
@@ -27,6 +28,7 @@ import tohear.hearo.admin.dto.request.FindInstitutionUserInIsRequest;
 import tohear.hearo.admin.dto.request.FindWardCareRequest;
 import tohear.hearo.admin.dto.request.ForApprovalInstitutionRequest;
 import tohear.hearo.admin.dto.request.SingleArchiveRequest;
+import tohear.hearo.admin.dto.response.AdminCareResponse;
 import tohear.hearo.admin.dto.response.AdminGuardCareResponse;
 import tohear.hearo.admin.dto.response.AdminGuardUserResponse;
 import tohear.hearo.admin.dto.response.AdminInstitutionResponse;
@@ -189,6 +191,14 @@ public class AdminUserController {
         
         adminUserService.deleteInstitution(request);
         return new Result<>("200", "기관을 삭제했습니다.", null);
+    }
+
+    @GetMapping("/find-care")
+    public Result forApprovalInstitution(@ModelAttribute AdminCareRequest request,
+                                         @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        AdminCareResponse response = adminUserService.findCare(request, pageable);
+        return new Result<>("200", "보호관계 목록을 조회했습니다.", response);
     }
     
     

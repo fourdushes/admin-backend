@@ -479,5 +479,40 @@ public class AdminUserRepositoryImpl implements AdminUserCustomRepository {
         return condition;
     }
 
+    @Override
+    public Page<Care> findCare(Pageable pageable, String keyword) {
+
+        List<Care> careList = queryFactory
+            .select(QCare.care)
+            .from(QCare.care)
+            .leftJoin(QCare.care.wardUser, QWardUser.wardUser).fetchJoin()
+            .leftJoin(QCare.care.guardUser, QGuardUser.guardUser).fetchJoin()
+            .where(
+                findCare(keyword),
+                QCare.care.careState.eq(CareState.APPROVED)
+            )
+            .orderBy(QCare.care.id.asc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        Long result = queryFactory
+            .select(QCare.care.count())
+            .from(QCare.care)
+            .where(
+                findCare(keyword),
+                QCare.care.careState.eq(CareState.APPROVED)
+            )
+            .fetchOne();
+
+        long count = result != null ? result : 0;
+
+        return new PageImpl<>(careList, pageable, count);
+    }
+
+    private BooleanExpression findCare(String keyword) {
+        return StringUtils.hasText(keyword) ? QCare.care.wardUser.id.contains(keyword).or(QCare.care.guardUser.id.contains(keyword)) : null;
+    }
+
 
 }
