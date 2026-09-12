@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hearo-admin-backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/fourdushes/admin-backend.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hearo
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

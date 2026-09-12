@@ -1,0 +1,18 @@
+.DS_Store
+
+# Gradle
+.gradle/
+.gradle-home/
+build/
+bin/
+
+# Environment
+.env
+.env.example
+frontend/.env
+src/main/resources/application.properties
+k8s/hearo-backend-secret.yaml
+k8s/hearo-backend-secret.example.yaml
+
+# Logs
+*.log
