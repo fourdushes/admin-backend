@@ -144,7 +144,15 @@ aws ecr create-repository \
 repo:fourdushes/admin-backend:ref:refs/heads/main
 ```
 
-공유 role의 ECR push 정책에는 `deploy/iam/github-actions-ecr-policy.json`을 추가합니다. Web EC2의 `HearoWebEc2Role`에는 k3s가 이미지를 pull할 수 있도록 `deploy/iam/web-ec2-ecr-pull-policy.json`을 추가합니다.
+기존 서비스와 동일하게 IAM 정책은 AWS에서 관리합니다. 이 저장소에 IAM 정책 JSON을 복제해 관리하지 않습니다.
+
+- GitHub Actions role에 연결된 기존 ECR push 고객 관리형 정책에 `hearo-admin-backend` repository ARN을 추가합니다.
+- Web EC2의 `HearoWebEc2Role`에 연결된 기존 ECR pull 정책에 같은 repository ARN을 추가합니다.
+- 기존 Backend, Frontend, Model repository ARN과 권한은 삭제하지 않습니다.
+
+```text
+arn:aws:ecr:ap-northeast-2:<AWS 계정 ID>:repository/hearo-admin-backend
+```
 
 GitHub repository 설정:
 
