@@ -192,7 +192,7 @@ GitHub Actions가 첫 정상 이미지를 push하고 manifest의 `bootstrap` 태
 ```bash
 git clone https://github.com/fourdushes/admin-backend.git
 cd admin-backend
-sudo ./deploy/argocd/install.sh
+sudo kubectl apply -f deploy/argocd/hearo-admin-backend-application.yaml
 sudo kubectl get application hearo-admin-backend -n argocd
 ```
 
