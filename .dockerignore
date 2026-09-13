@@ -1,0 +1,9 @@
+.git
+.github
+.gradle
+build
+docs
+k8s
+deploy
+README.md
+*.log
